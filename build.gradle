@@ -7,7 +7,9 @@ version = project.mod_version
 group = project.maven_group
 
 repositories {
-
+    maven { url "https://maven.jamieswhiteshirt.com/libs-release"
+        content { includeGroup "com.jamieswhiteshirt" }
+    }
 }
 
 dependencies {
@@ -16,6 +18,8 @@ dependencies {
 
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+    include modImplementation("com.jamieswhiteshirt:reach-entity-attributes:${project.reach_attr_version}")
 }
 
 loom {

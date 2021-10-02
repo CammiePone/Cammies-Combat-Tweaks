@@ -7,6 +7,13 @@
 				"name": "Weapon modifier",
 				"operation": "add",
 				"value": -2
+			},
+			{
+				"attribute": "reach-entity-attributes:attack_range",
+				"uuid": "6cb37f84-5925-42af-8dd1-47deb5d96506",
+				"name": "Weapon modifier",
+				"operation": "add",
+				"value": 1
 			}
 		]
 	}

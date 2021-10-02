@@ -1,0 +1,27 @@
+{
+	"type": "minecraft:chest",
+	"pools": [
+		{
+			"rolls": 1,
+			"entries": [
+				{
+					"type": "minecraft:item",
+					"name": "minecraft:trident",
+					"functions": [
+						{
+							"function": "minecraft:enchant_with_levels",
+							"levels": 15,
+							"treasure": true
+						}
+					],
+					"conditions": [
+						{
+							"condition": "minecraft:random_chance",
+							"chance": 0.5
+						}
+					]
+				}
+			]
+		}
+	]
+}

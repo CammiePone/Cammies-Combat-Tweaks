@@ -12,7 +12,7 @@ public class CombatTweaks implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		EventHandler.serverEvents();
+		EventHandler.commonEvents();
 		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new AttributeReloadListener());
 	}
 

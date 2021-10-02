@@ -1,6 +1,6 @@
 package dev.cammiescorner.combattweaks.common.data;
 
-import com.google.common.collect.HashMultimap;
+import com.google.common.collect.MultimapBuilder;
 import com.google.gson.*;
 import com.mojang.datafixers.util.Pair;
 import dev.cammiescorner.combattweaks.CombatTweaks;
@@ -35,6 +35,7 @@ public class AttributeReloadListener extends JsonDataLoader implements Identifia
 		return ID;
 	}
 
+	@SuppressWarnings("UnstableApiUsage")
 	@Override
 	protected void apply(Map<Identifier, JsonElement> prepared, ResourceManager manager, Profiler profiler) {
 		CTHelper.ATTRIBUTE_OVERRIDES.clear();
@@ -83,7 +84,7 @@ public class AttributeReloadListener extends JsonDataLoader implements Identifia
 									};
 									double value = JsonHelper.getDouble(modifier, "value", 1);
 
-									CTHelper.ATTRIBUTE_OVERRIDES.computeIfAbsent(new Pair<>(item, equipmentSlot), pair -> HashMultimap.create()).put(attribute, new EntityAttributeModifier(uuid, name, value, operation));
+									CTHelper.ATTRIBUTE_OVERRIDES.computeIfAbsent(new Pair<>(item, equipmentSlot), pair -> MultimapBuilder.linkedHashKeys().linkedListValues().build()).put(attribute, new EntityAttributeModifier(uuid, name, value, operation));
 									removedUUIDs.add(uuid);
 								}
 							}

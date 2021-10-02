@@ -9,7 +9,8 @@
 		"MultishotEnchantmentMixin",
 		"PiercingEnchantmentMixin",
 		"ShieldItemMixin",
-		"ToolItemMixin"
+		"ToolItemMixin",
+		"TridentItemMixin"
 	],
 	"client": [
 		"client.MinecraftClientMixin"
