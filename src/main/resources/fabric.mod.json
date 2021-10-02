@@ -1,0 +1,37 @@
+{
+	"schemaVersion": 1,
+	"id": "combattweaks",
+	"version": "${version}",
+	"name": "Cammie's Combat Tweaks",
+	"description": "aaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+	"authors": [
+		"ComradeCammie"
+	],
+	"contact": {
+		"homepage": "https://www.curseforge.com/minecraft/mc-mods/cammies-combat-tweaks",
+		"sources": "https://github.com/CammiePone/Cammies-Combat-Tweaks"
+	},
+	"license": "MIT",
+	"icon": "assets/combattweaks/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"dev.cammiescorner.combattweaks.CombatTweaks"
+		],
+		"client": [
+			"dev.cammiescorner.combattweaks.client.CombatTweaksClient"
+		]
+	},
+	"mixins": [
+		"combattweaks.mixins.json"
+	],
+	"accessWidener": "META-INF/combattweaks.accesswidener",
+	"depends": {
+		"fabricloader": ">=0.7.4",
+		"fabric": "*",
+		"minecraft": "1.17.x"
+	},
+	"suggests": {
+		"flamingo": "*"
+	}
+}

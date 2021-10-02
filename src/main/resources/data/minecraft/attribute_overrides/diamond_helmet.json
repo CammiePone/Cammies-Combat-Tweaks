@@ -1,0 +1,20 @@
+{
+	"head": {
+		"modifiers": [
+			{
+				"attribute": "minecraft:generic.armor",
+				"uuid": "2ad3f246-fee1-4e67-b886-69fd380bb150",
+				"name": "Armor modifier",
+				"operation": "add",
+				"value": 3
+			},
+			{
+				"attribute": "minecraft:generic.armor_toughness",
+				"uuid": "2ad3f246-fee1-4e67-b886-69fd380bb150",
+				"name": "Armor toughness",
+				"operation": "add",
+				"value": 0
+			}
+		]
+	}
+}
