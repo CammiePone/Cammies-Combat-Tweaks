@@ -6,11 +6,13 @@
 	"mixins": [
 		"ItemStackMixin",
 		"LivingEntityMixin",
+		"MendingEnchantmentMixin",
 		"MultishotEnchantmentMixin",
 		"PiercingEnchantmentMixin",
 		"ShieldItemMixin",
 		"ToolItemMixin",
-		"TridentItemMixin"
+		"TridentItemMixin",
+		"UnbreakingEnchantmentMixin"
 	],
 	"client": [
 		"client.MinecraftClientMixin"
