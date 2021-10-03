@@ -34,7 +34,7 @@ public abstract class MinecraftClientMixin {
 	), cancellable = true)
 	public void handleAttacking(CallbackInfo info) {
 		if(player != null) {
-			if(player.getAttackCooldownProgress(0.5F) > 0.33F)
+			if(player.getAttackCooldownProgress(0.5F) > 0.66F)
 				attackQueued = true;
 
 			if(player.getAttackCooldownProgress(0.5F) < 1F || player.getItemCooldownManager().isCoolingDown(player.getMainHandStack().getItem()))
