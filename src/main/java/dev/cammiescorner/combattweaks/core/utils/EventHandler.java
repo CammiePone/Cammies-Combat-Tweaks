@@ -27,6 +27,8 @@ import net.minecraft.loot.LootPool;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -73,7 +75,6 @@ public class EventHandler {
 
 						lightning.refreshPositionAfterTeleport(Vec3d.ofBottomCenter(pos.up()));
 						lightning.setCosmetic(true);
-						lightning.remainingActions = 3;
 						world.spawnEntity(lightning);
 						tag.remove("Damage");
 						tag.putBoolean("Unbreakable", true);
@@ -92,6 +93,8 @@ public class EventHandler {
 							tag.remove("Enchantments");
 					}
 				}
+
+				world.playSound(player, pos, SoundEvents.ITEM_TRIDENT_THUNDER, SoundCategory.BLOCKS, 1F, 1F);
 
 				return ActionResult.SUCCESS;
 			}
