@@ -67,13 +67,7 @@ public class AttributeReloadListener extends JsonDataLoader implements Identifia
 								EntityAttribute attribute = Registry.ATTRIBUTE.get(new Identifier(JsonHelper.getString(modifier, "attribute")));
 
 								if(attribute != null) {
-									UUID uuid = UUID.fromString(JsonHelper.getString(modifier, "uuid"));
-
-									// Mojang hates modders :despair:
-									if(uuid.equals(Item.ATTACK_DAMAGE_MODIFIER_ID))
-										uuid = Item.ATTACK_DAMAGE_MODIFIER_ID;
-									if(uuid.equals(Item.ATTACK_SPEED_MODIFIER_ID))
-										uuid = Item.ATTACK_SPEED_MODIFIER_ID;
+									UUID uuid = CTHelper.fixMojank(UUID.fromString(JsonHelper.getString(modifier, "uuid")));
 
 									String name = JsonHelper.getString(modifier, "name", uuid.toString());
 									EntityAttributeModifier.Operation operation = switch(JsonHelper.getString(modifier, "operation", "add")) {

@@ -3,16 +3,20 @@ package dev.cammiescorner.combattweaks.core.utils;
 import dev.cammiescorner.combattweaks.CombatTweaks;
 import dev.cammiescorner.combattweaks.client.CombatTweaksClient;
 import dev.cammiescorner.combattweaks.common.packets.CheckModOnServerPacket;
+import dev.cammiescorner.combattweaks.common.packets.SyncAttributeOverridesPacket;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.loot.v1.FabricLootPool;
 import net.fabricmc.fabric.api.loot.v1.FabricLootPoolBuilder;
 import net.fabricmc.fabric.api.loot.v1.FabricLootSupplier;
 import net.fabricmc.fabric.api.loot.v1.FabricLootSupplierBuilder;
 import net.fabricmc.fabric.api.loot.v1.event.LootTableLoadingCallback;
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.entity.BeaconBlockEntity;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
@@ -43,7 +47,15 @@ public class EventHandler {
 	}
 
 	public static void commonEvents() {
-		ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> CheckModOnServerPacket.send(sender));
+		ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
+			CheckModOnServerPacket.send(sender);
+			SyncAttributeOverridesPacket.send(sender);
+		});
+
+		ServerLifecycleEvents.END_DATA_PACK_RELOAD.register((server, manager, success) -> {
+			if(success)
+				PlayerLookup.all(server).forEach(player -> SyncAttributeOverridesPacket.send(ServerPlayNetworking.getSender(player)));
+		});
 
 		UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
 			BlockPos pos = hitResult.getBlockPos();
