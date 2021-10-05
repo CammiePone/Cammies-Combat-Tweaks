@@ -9,17 +9,23 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 
 @Mixin(HungerManager.class)
 public class HungerManagerMixin {
-	@ModifyConstant(method = "update", constant = @Constant(intValue = 18, ordinal = 0))
+	@ModifyConstant(method = "update", constant = @Constant(intValue = 18,
+			ordinal = 0
+	))
 	public int minHungerForRegen(int regenRate) {
 		return 11;
 	}
 
-	@ModifyConstant(method = "update", constant = @Constant(intValue = 10, ordinal = 0))
+	@ModifyConstant(method = "update", constant = @Constant(intValue = 10,
+			ordinal = 0
+	))
 	public int regenRateSaturation(int regenRate) {
 		return 20;
 	}
 
-	@ModifyConstant(method = "update", constant = @Constant(intValue = 80, ordinal = 0))
+	@ModifyConstant(method = "update", constant = @Constant(intValue = 80,
+			ordinal = 0
+	))
 	public int regenRateNoSaturation(int regenRate) {
 		return 20;
 	}
