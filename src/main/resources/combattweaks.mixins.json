@@ -4,6 +4,7 @@
 	"package": "dev.cammiescorner.combattweaks.core.mixin",
 	"compatibilityLevel": "JAVA_16",
 	"mixins": [
+		"HungerManagerMixin",
 		"ItemStackMixin",
 		"LivingEntityMixin",
 		"MendingEnchantmentMixin",

@@ -37,7 +37,7 @@ public abstract class LivingEntityMixin extends Entity {
 	public void resetHurtTime(DamageSource source, float amount, CallbackInfoReturnable<Boolean> info) {
 		damageAmount = amount;
 
-		if(source.isProjectile() || source.isMagic() || source.isExplosive() || source.isFallingBlock() ||
+		if(source.isProjectile() || source.isExplosive() || source.isFallingBlock() ||
 				source.getSource() instanceof ProjectileEntity || source.getAttacker() instanceof ProjectileEntity ||
 				source.getSource() instanceof PlayerEntity || source.getAttacker() instanceof PlayerEntity)
 			this.timeUntilRegen = 0;
