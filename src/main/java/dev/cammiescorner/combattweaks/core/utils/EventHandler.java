@@ -4,9 +4,11 @@ import dev.cammiescorner.combattweaks.CombatTweaks;
 import dev.cammiescorner.combattweaks.client.CombatTweaksClient;
 import dev.cammiescorner.combattweaks.common.packets.s2c.CheckModOnServerPacket;
 import dev.cammiescorner.combattweaks.common.packets.s2c.SyncAttributeOverridesPacket;
+import dev.cammiescorner.combattweaks.core.registry.ModCommands;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
+import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.loot.v1.FabricLootPool;
@@ -49,16 +51,19 @@ public class EventHandler {
 	}
 
 	public static void commonEvents() {
+		//-----Join World Callback-----//
 		ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
 			CheckModOnServerPacket.send(sender);
 			SyncAttributeOverridesPacket.send(sender);
 		});
 
+		//-----End Datapack Reload Callback-----//
 		ServerLifecycleEvents.END_DATA_PACK_RELOAD.register((server, manager, success) -> {
 			if(success)
 				PlayerLookup.all(server).forEach(player -> SyncAttributeOverridesPacket.send(ServerPlayNetworking.getSender(player)));
 		});
 
+		//-----Use Block Callback-----//
 		UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
 			BlockPos pos = hitResult.getBlockPos();
 
@@ -102,6 +107,7 @@ public class EventHandler {
 			return ActionResult.PASS;
 		});
 
+		//-----Loot Table Callback-----//
 		LootTableLoadingCallback.EVENT.register((resourceManager, manager, id, supplier, setter) -> {
 			if(id.equals(SHIPWRECK_MAP)) {
 				FabricLootSupplier fSupplier = (FabricLootSupplier) supplier.build();
@@ -122,5 +128,8 @@ public class EventHandler {
 				}
 			}
 		});
+
+		//-----Command Callback-----//
+		CommandRegistrationCallback.EVENT.register(ModCommands::init);
 	}
 }

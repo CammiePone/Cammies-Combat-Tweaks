@@ -1,5 +1,8 @@
 {
 	"chest": {
+		"removed": [
+			"9f3d476d-c118-4544-8365-64846904b48e"
+		],
 		"modifiers": [
 			{
 				"attribute": "minecraft:generic.armor",
@@ -7,20 +10,6 @@
 				"name": "Armor modifier",
 				"operation": "add",
 				"value": 8
-			},
-			{
-				"attribute": "minecraft:generic.armor_toughness",
-				"uuid": "9f3d476d-c118-4544-8365-64846904b48e",
-				"name": "Armor toughness",
-				"operation": "add",
-				"value": 0
-			},
-			{
-				"attribute": "minecraft:generic.knockback_resistance",
-				"uuid": "9f3d476d-c118-4544-8365-64846904b48e",
-				"name": "Knockback resistance",
-				"operation": "add",
-				"value": 0
 			}
 		]
 	}

@@ -1,5 +1,8 @@
 {
 	"legs": {
+		"removed": [
+			"d8499b04-0e66-4726-ab29-64469d734e0d"
+		],
 		"modifiers": [
 			{
 				"attribute": "minecraft:generic.armor",
@@ -7,13 +10,6 @@
 				"name": "Armor modifier",
 				"operation": "add",
 				"value": 6
-			},
-			{
-				"attribute": "minecraft:generic.armor_toughness",
-				"uuid": "d8499b04-0e66-4726-ab29-64469d734e0d",
-				"name": "Armor toughness",
-				"operation": "add",
-				"value": 0
 			}
 		]
 	}

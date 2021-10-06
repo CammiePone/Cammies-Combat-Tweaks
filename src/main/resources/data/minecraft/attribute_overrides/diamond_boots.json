@@ -1,5 +1,8 @@
 {
 	"feet": {
+		"removed": [
+			"845db27c-c624-495f-8c9f-6020a9a58b6b"
+		],
 		"modifiers": [
 			{
 				"attribute": "minecraft:generic.armor",
@@ -7,13 +10,6 @@
 				"name": "Armor modifier",
 				"operation": "add",
 				"value": 3
-			},
-			{
-				"attribute": "minecraft:generic.armor_toughness",
-				"uuid": "845db27c-c624-495f-8c9f-6020a9a58b6b",
-				"name": "Armor toughness",
-				"operation": "add",
-				"value": 0
 			}
 		]
 	}
