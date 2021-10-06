@@ -15,6 +15,7 @@
 		"PlayerEntityMixin",
 		"ProjectileUtilMixin",
 		"ShieldItemMixin",
+		"SweepingEnchantmentMixin",
 		"ToolItemMixin",
 		"TridentItemMixin",
 		"UnbreakingEnchantmentMixin"

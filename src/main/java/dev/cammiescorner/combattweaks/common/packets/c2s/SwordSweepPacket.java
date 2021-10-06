@@ -39,20 +39,23 @@ public class SwordSweepPacket {
 
 		server.execute(() -> {
 			float yaw = player.getYaw() * 0.017453292F;
+			float sweepingMultiplier = EnchantmentHelper.getSweepingMultiplier(player);
 			Vec3d pos = player.getPos().add(-MathHelper.sin(yaw) * 1.5D, player.getHeight() / 2D, MathHelper.cos(yaw) * 1.5D);
 			List<LivingEntity> targets = player.world.getNonSpectatingEntities(LivingEntity.class, Box.from(pos).offset(-0.5D, -0.5D, -0.5D).expand(1D, 0.25D, 1D));
-			float damage = (float) (1F + EnchantmentHelper.getSweepingMultiplier(player) * player.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE));
 
-			targets.forEach(target -> {
-				if(target != player && target != player.world.getEntityById(entityId)) {
-					System.out.println(target);
-					target.takeKnockback(0.4D, MathHelper.sin(player.getYaw() * 0.0175F), -MathHelper.cos(player.getYaw() * 0.0175F));
-					target.damage(DamageSource.player(player), damage);
-				}
-			});
+			if(sweepingMultiplier > 0) {
+				targets.forEach(target -> {
+					if(target != player && target != player.world.getEntityById(entityId)) {
+						float damage = (float) (sweepingMultiplier * (player.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE) + EnchantmentHelper.getAttackDamage(player.getMainHandStack(), target.getGroup())));
 
-			player.world.playSoundFromEntity(null, player, SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, player.getSoundCategory(), 1F, 1F);
-			player.spawnSweepAttackParticles();
+						target.takeKnockback(0.4D, MathHelper.sin(player.getYaw() * 0.0175F), -MathHelper.cos(player.getYaw() * 0.0175F));
+						target.damage(DamageSource.player(player), damage);
+					}
+				});
+
+				player.world.playSoundFromEntity(null, player, SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, player.getSoundCategory(), 1F, 1F);
+				player.spawnSweepAttackParticles();
+			}
 		});
 	}
 }
