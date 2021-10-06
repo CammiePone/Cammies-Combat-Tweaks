@@ -1,4 +1,4 @@
-package dev.cammiescorner.combattweaks.common.packets;
+package dev.cammiescorner.combattweaks.common.packets.s2c;
 
 import dev.cammiescorner.combattweaks.CombatTweaks;
 import dev.cammiescorner.combattweaks.client.CombatTweaksClient;

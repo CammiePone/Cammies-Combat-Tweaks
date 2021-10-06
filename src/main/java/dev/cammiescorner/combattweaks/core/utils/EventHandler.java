@@ -2,8 +2,8 @@ package dev.cammiescorner.combattweaks.core.utils;
 
 import dev.cammiescorner.combattweaks.CombatTweaks;
 import dev.cammiescorner.combattweaks.client.CombatTweaksClient;
-import dev.cammiescorner.combattweaks.common.packets.CheckModOnServerPacket;
-import dev.cammiescorner.combattweaks.common.packets.SyncAttributeOverridesPacket;
+import dev.cammiescorner.combattweaks.common.packets.s2c.CheckModOnServerPacket;
+import dev.cammiescorner.combattweaks.common.packets.s2c.SyncAttributeOverridesPacket;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;

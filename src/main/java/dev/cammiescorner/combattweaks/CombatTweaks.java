@@ -2,12 +2,14 @@ package dev.cammiescorner.combattweaks;
 
 import dev.cammiescorner.asa.AirStrafingAttribute;
 import dev.cammiescorner.combattweaks.common.data.AttributeReloadListener;
+import dev.cammiescorner.combattweaks.common.packets.c2s.SwordSweepPacket;
 import dev.cammiescorner.combattweaks.core.integration.CombatTweaksConfig;
 import dev.cammiescorner.combattweaks.core.utils.EventHandler;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigHolder;
 import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.effect.StatusEffects;
@@ -27,6 +29,7 @@ public class CombatTweaks implements ModInitializer {
 
 		EventHandler.commonEvents();
 		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new AttributeReloadListener());
+		ServerPlayNetworking.registerGlobalReceiver(SwordSweepPacket.ID, SwordSweepPacket::handle);
 	}
 
 	public static CombatTweaksConfig getConfig() {

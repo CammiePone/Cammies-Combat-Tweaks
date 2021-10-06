@@ -1,4 +1,4 @@
-package dev.cammiescorner.combattweaks.common.packets;
+package dev.cammiescorner.combattweaks.common.packets.s2c;
 
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;

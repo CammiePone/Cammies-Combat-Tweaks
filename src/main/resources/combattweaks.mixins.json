@@ -12,6 +12,7 @@
 		"MendingEnchantmentMixin",
 		"MultishotEnchantmentMixin",
 		"PiercingEnchantmentMixin",
+		"PlayerEntityMixin",
 		"ProjectileUtilMixin",
 		"ShieldItemMixin",
 		"ToolItemMixin",
