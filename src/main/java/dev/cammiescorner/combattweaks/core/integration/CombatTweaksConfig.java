@@ -61,9 +61,7 @@ public class CombatTweaksConfig implements ConfigData {
 	}
 
 	public static class PotionTweaks {
-		@Comment("Requires Restart")
 		public boolean speedIncreasesAirStrafingSpeed = true;
-		@Comment("Requires Restart")
 		public boolean slownessDecreasesAirStrafingSpeed = true;
 	}
 

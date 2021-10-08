@@ -33,8 +33,7 @@
 		"fabricloader": ">=0.7.4",
 		"fabric": "*",
 		"minecraft": "1.17.x",
-		"cloth-config2": ">=5.0.38",
-		"asa": ">=1.2"
+		"cloth-config2": ">=5.0.38"
 	},
 	"conflicts": {
 		"airtide": "*"

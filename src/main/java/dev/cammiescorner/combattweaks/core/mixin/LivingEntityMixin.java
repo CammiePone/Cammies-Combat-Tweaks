@@ -7,6 +7,9 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.damage.EntityDamageSource;
+import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.Item;
@@ -27,10 +30,24 @@ public abstract class LivingEntityMixin extends Entity {
 	@Shadow public float knockbackVelocity;
 	@Shadow protected abstract void initDataTracker();
 	@Shadow private @Nullable DamageSource lastDamageSource;
+	@Shadow public abstract @Nullable StatusEffectInstance getStatusEffect(StatusEffect effect);
 
+	@Shadow public float flyingSpeed;
 	@Unique private float damageAmount;
 
 	public LivingEntityMixin(EntityType<?> entityType, World world) { super(entityType, world); }
+
+	@Inject(method = "tick", at = @At("HEAD"))
+	public void tick(CallbackInfo info) {
+		CombatTweaksConfig.PotionTweaks potions = CombatTweaks.getConfig().potions;
+		StatusEffectInstance speed = getStatusEffect(StatusEffects.SPEED);
+		StatusEffectInstance slowness = getStatusEffect(StatusEffects.SLOWNESS);
+
+		if(speed != null && potions.speedIncreasesAirStrafingSpeed)
+			flyingSpeed *= (speed.getAmplifier() + 1) * 1.2;
+		if(slowness != null && potions.slownessDecreasesAirStrafingSpeed)
+			flyingSpeed *= Math.max(0, 1 - ((slowness.getAmplifier() + 1) * 0.15));
+	}
 
 	@ModifyConstant(method = "blockedByShield", constant = @Constant(doubleValue = 0.0D,
 			ordinal = 1
