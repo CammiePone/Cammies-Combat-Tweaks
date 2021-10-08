@@ -4,6 +4,7 @@ import dev.cammiescorner.combattweaks.CombatTweaks;
 import dev.cammiescorner.combattweaks.client.CombatTweaksClient;
 import dev.cammiescorner.combattweaks.common.packets.s2c.CheckModOnServerPacket;
 import dev.cammiescorner.combattweaks.common.packets.s2c.SyncAttributeOverridesPacket;
+import dev.cammiescorner.combattweaks.core.integration.CombatTweaksConfig;
 import dev.cammiescorner.combattweaks.core.registry.ModCommands;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -20,8 +21,8 @@ import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.entity.BeaconBlockEntity;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LightningEntity;
 import net.minecraft.item.ItemStack;
@@ -51,6 +52,9 @@ public class EventHandler {
 	}
 
 	public static void commonEvents() {
+		CombatTweaksConfig config = CombatTweaks.getConfig();
+		CombatTweaksConfig.EnchantmentTweaks enchantments = config.enchantments;
+
 		//-----Join World Callback-----//
 		ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
 			CheckModOnServerPacket.send(sender);
@@ -67,35 +71,41 @@ public class EventHandler {
 		UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
 			BlockPos pos = hitResult.getBlockPos();
 
-			if(player.isSneaking() && world.getBlockEntity(pos) instanceof BeaconBlockEntity beacon) {
+			if(enchantments.canMakeUnbreakableTools && player.isSneaking() && world.getBlockEntity(pos) instanceof BeaconBlockEntity beacon) {
 				if(!world.isClient()) {
 					ItemStack stack = player.getStackInHand(hand);
 					NbtCompound tag = stack.getOrCreateNbt();
-					String mendingId = Registry.ENCHANTMENT.getId(Enchantments.MENDING).toString();
-					String unbreakingId = Registry.ENCHANTMENT.getId(Enchantments.UNBREAKING).toString();
 
-					if(!tag.getBoolean("Unbreakable") && beacon.level >= 4 && EnchantmentHelper.getLevel(Enchantments.MENDING, stack) > 0) {
-						LightningEntity lightning = EntityType.LIGHTNING_BOLT.create(world);
-						NbtList enchTag = tag.getList("Enchantments", NbtElement.COMPOUND_TYPE);
+					if(!tag.getBoolean("Unbreakable") && beacon.level >= enchantments.unbreakableBeaconLevel) {
+						boolean hasRequiredEnchants = enchantments.unbreakableRequiredEnchants.entrySet().stream().allMatch(entry -> {
+							Enchantment enchantment = Registry.ENCHANTMENT.get(entry.getKey());
 
-						lightning.refreshPositionAfterTeleport(Vec3d.ofBottomCenter(pos.up()));
-						lightning.setCosmetic(true);
-						world.spawnEntity(lightning);
-						tag.remove("Damage");
-						tag.putBoolean("Unbreakable", true);
+							return enchantment == null || EnchantmentHelper.getLevel(enchantment, stack) >= entry.getValue();
+						});
 
-						Iterator<NbtElement> enchants = enchTag.iterator();
+						if(hasRequiredEnchants) {
+							LightningEntity lightning = EntityType.LIGHTNING_BOLT.create(world);
+							NbtList enchTag = tag.getList("Enchantments", NbtElement.COMPOUND_TYPE);
 
-						while(enchants.hasNext()) {
-							NbtCompound enchant = (NbtCompound) enchants.next();
-							String id = enchant.getString("id");
+							lightning.refreshPositionAfterTeleport(Vec3d.ofBottomCenter(pos.up()));
+							lightning.setCosmetic(true);
+							world.spawnEntity(lightning);
+							tag.remove("Damage");
+							tag.putBoolean("Unbreakable", true);
 
-							if(id.equals(mendingId) || id.equals(unbreakingId))
-								enchants.remove();
+							Iterator<NbtElement> enchants = enchTag.iterator();
+
+							while(enchants.hasNext()) {
+								NbtCompound enchant = (NbtCompound) enchants.next();
+								String id = enchant.getString("id");
+
+								if(enchantments.unbreakableRemovesEnchants.contains(id))
+									enchants.remove();
+							}
+
+							if(enchTag.isEmpty())
+								tag.remove("Enchantments");
 						}
-
-						if(enchTag.isEmpty())
-							tag.remove("Enchantments");
 					}
 				}
 

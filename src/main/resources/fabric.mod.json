@@ -20,6 +20,9 @@
 		],
 		"client": [
 			"dev.cammiescorner.combattweaks.client.CombatTweaksClient"
+		],
+		"modmenu": [
+			"dev.cammiescorner.combattweaks.core.integration.CombatTweaksModMenu"
 		]
 	},
 	"mixins": [

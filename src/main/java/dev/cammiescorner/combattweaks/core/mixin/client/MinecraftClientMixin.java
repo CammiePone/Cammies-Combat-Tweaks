@@ -1,7 +1,9 @@
 package dev.cammiescorner.combattweaks.core.mixin.client;
 
+import dev.cammiescorner.combattweaks.CombatTweaks;
 import dev.cammiescorner.combattweaks.client.CombatTweaksClient;
 import dev.cammiescorner.combattweaks.common.packets.c2s.SwordSweepPacket;
+import dev.cammiescorner.combattweaks.core.integration.CombatTweaksConfig;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.KeyBinding;
@@ -38,18 +40,24 @@ public abstract class MinecraftClientMixin {
 			ordinal = 0
 	), cancellable = true)
 	public void handleAttacking(CallbackInfo info) {
+		CombatTweaksConfig config = CombatTweaks.getConfig();
+		CombatTweaksConfig.GeneralTweaks general = config.general;
+		CombatTweaksConfig.SwordTweaks swords = config.swords;
+
 		if(player != null) {
-			if(player.getAttackCooldownProgress(0.5F) > 0.66F)
+			if(player.getAttackCooldownProgress(0.5F) > general.minAttackCooldownForQueue)
 				attackQueued = true;
 
-			if(player.getAttackCooldownProgress(0.5F) < 1F || player.getItemCooldownManager().isCoolingDown(player.getMainHandStack().getItem()))
+			if(player.getAttackCooldownProgress(0.5F) < general.minAttackCooldown || (player.getItemCooldownManager().isCoolingDown(player.getMainHandStack().getItem()) && general.itemCooldownAffectsLMB))
 				info.cancel();
 
-			if(player.getAttackCooldownProgress(0.5F) == 1F && !player.getItemCooldownManager().isCoolingDown(player.getMainHandStack().getItem()) && player.getMainHandStack().getItem() instanceof SwordItem && crosshairTarget != null) {
-				SwordSweepPacket.send(crosshairTarget.getType() == HitResult.Type.ENTITY ? ((EntityHitResult) crosshairTarget).getEntity() : null);
+			if(swords.alwaysSweepingEdge) {
+				if(player.getAttackCooldownProgress(0.5F) == general.minAttackCooldown && (!player.getItemCooldownManager().isCoolingDown(player.getMainHandStack().getItem()) || !general.itemCooldownAffectsLMB) && player.getMainHandStack().getItem() instanceof SwordItem && crosshairTarget != null) {
+					SwordSweepPacket.send(crosshairTarget.getType() == HitResult.Type.ENTITY ? ((EntityHitResult) crosshairTarget).getEntity() : null);
 
-				if(crosshairTarget.getType() == HitResult.Type.BLOCK)
-					player.resetLastAttackedTicks();
+					if(crosshairTarget.getType() == HitResult.Type.BLOCK)
+						player.resetLastAttackedTicks();
+				}
 			}
 		}
 
@@ -61,7 +69,10 @@ public abstract class MinecraftClientMixin {
 			target = "Lnet/minecraft/client/network/ClientPlayerEntity;resetLastAttackedTicks()V"
 	))
 	public void removeAttackCooldown(CallbackInfo info) {
-		if(CombatTweaksClient.isEnabled)
+		CombatTweaksConfig config = CombatTweaks.getConfig();
+		CombatTweaksConfig.GeneralTweaks general = config.general;
+
+		if(CombatTweaksClient.isEnabled && general.undo1dot8Jank)
 			attackCooldown = 0;
 	}
 }

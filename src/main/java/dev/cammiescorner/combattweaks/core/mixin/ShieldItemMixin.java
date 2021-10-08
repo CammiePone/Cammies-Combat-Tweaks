@@ -1,5 +1,7 @@
 package dev.cammiescorner.combattweaks.core.mixin;
 
+import dev.cammiescorner.combattweaks.CombatTweaks;
+import dev.cammiescorner.combattweaks.core.integration.CombatTweaksConfig;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -14,7 +16,10 @@ public abstract class ShieldItemMixin extends Item {
 
 	@Override
 	public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
-		if(getMaxUseTime(stack) - remainingUseTicks <= 10 && user instanceof PlayerEntity player)
-			player.getItemCooldownManager().set(this, 40);
+		CombatTweaksConfig config = CombatTweaks.getConfig();
+		CombatTweaksConfig.ShieldTweaks shields = config.shields;
+
+		if(getMaxUseTime(stack) - remainingUseTicks <= shields.minTicksHasToBeUp && user instanceof PlayerEntity player)
+			player.getItemCooldownManager().set(this, shields.disableShieldOnLetGoTicks);
 	}
 }

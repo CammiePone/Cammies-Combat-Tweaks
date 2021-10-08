@@ -1,5 +1,6 @@
 package dev.cammiescorner.combattweaks.core.mixin;
 
+import dev.cammiescorner.combattweaks.CombatTweaks;
 import net.minecraft.item.BowItem;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -11,6 +12,6 @@ public class BowItemMixin {
 			target = "Lnet/minecraft/entity/projectile/PersistentProjectileEntity;setProperties(Lnet/minecraft/entity/Entity;FFFFF)V"
 	), index = 5)
 	public float removeDeviation(float divergence) {
-		return 0F;
+		return CombatTweaks.getConfig().projectiles.randomDeviation;
 	}
 }

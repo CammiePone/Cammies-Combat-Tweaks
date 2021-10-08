@@ -1,5 +1,6 @@
 package dev.cammiescorner.combattweaks.core.mixin;
 
+import dev.cammiescorner.combattweaks.CombatTweaks;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.enchantment.MultishotEnchantment;
@@ -15,6 +16,7 @@ public abstract class MultishotEnchantmentMixin extends Enchantment {
 
 	@Inject(method = "canAccept", at = @At("HEAD"), cancellable = true)
 	public void canAccept(Enchantment other, CallbackInfoReturnable<Boolean> info) {
-		info.setReturnValue(super.canAccept(other));
+		if(CombatTweaks.getConfig().crossbows.multishotAndPiercingWorkTogether)
+			info.setReturnValue(super.canAccept(other));
 	}
 }

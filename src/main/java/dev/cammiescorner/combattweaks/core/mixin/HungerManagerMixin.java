@@ -1,5 +1,6 @@
 package dev.cammiescorner.combattweaks.core.mixin;
 
+import dev.cammiescorner.combattweaks.CombatTweaks;
 import net.minecraft.entity.player.HungerManager;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -13,7 +14,7 @@ public class HungerManagerMixin {
 			ordinal = 0
 	))
 	public int minHungerForRegen(int regenRate) {
-		return 11;
+		return CombatTweaks.getConfig().regen.minHungerForRegen;
 	}
 
 	@ModifyConstant(method = "update", constant = @Constant(intValue = 10,

@@ -1,5 +1,6 @@
 package dev.cammiescorner.combattweaks.core.mixin;
 
+import dev.cammiescorner.combattweaks.CombatTweaks;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.enchantment.Enchantments;
@@ -19,6 +20,6 @@ public abstract class SweepingEnchantmentMixin extends Enchantment {
 
 	@Inject(method = "getMultiplier", at = @At("HEAD"), cancellable = true)
 	private static void getMultiplier(int level, CallbackInfoReturnable<Float> info) {
-		info.setReturnValue(level / (float) Enchantments.SWEEPING.getMaxLevel());
+		info.setReturnValue(CombatTweaks.getConfig().enchantments.maxSweepingEdgeMult * (level / Enchantments.SWEEPING.getMaxLevel()));
 	}
 }

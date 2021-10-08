@@ -25,8 +25,10 @@ public class CombatTweaks implements ModInitializer {
 		AutoConfig.register(CombatTweaksConfig.class, JanksonConfigSerializer::new);
 		configHolder = AutoConfig.getConfigHolder(CombatTweaksConfig.class);
 
-		StatusEffects.SPEED.addAttributeModifier(AirStrafingAttribute.getAirStrafingAttribute(), "b316f36d-eced-4205-8b99-da1f89a961c5", 0.2, EntityAttributeModifier.Operation.MULTIPLY_TOTAL);
-		StatusEffects.SLOWNESS.addAttributeModifier(AirStrafingAttribute.getAirStrafingAttribute(), "45386f75-9598-4c45-a2e3-82dca254d1aa", -0.15, EntityAttributeModifier.Operation.MULTIPLY_TOTAL);
+		if(getConfig().potions.speedIncreasesAirStrafingSpeed)
+			StatusEffects.SPEED.addAttributeModifier(AirStrafingAttribute.getAirStrafingAttribute(), "b316f36d-eced-4205-8b99-da1f89a961c5", 0.2, EntityAttributeModifier.Operation.MULTIPLY_TOTAL);
+		if(getConfig().potions.slownessDecreasesAirStrafingSpeed)
+			StatusEffects.SLOWNESS.addAttributeModifier(AirStrafingAttribute.getAirStrafingAttribute(), "45386f75-9598-4c45-a2e3-82dca254d1aa", -0.15, EntityAttributeModifier.Operation.MULTIPLY_TOTAL);
 
 		EventHandler.commonEvents();
 		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new AttributeReloadListener());

@@ -1,5 +1,6 @@
 package dev.cammiescorner.combattweaks.core.mixin;
 
+import dev.cammiescorner.combattweaks.CombatTweaks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileUtil;
@@ -21,9 +22,11 @@ import static net.minecraft.entity.projectile.ProjectileUtil.method_37226;
 public class ProjectileUtilMixin {
 	@Inject(method = "getEntityCollision", at = @At("HEAD"), cancellable = true)
 	private static void canHitFlyingEntity(World world, Entity entity, Vec3d vec3d, Vec3d vec3d2, Box box, Predicate<Entity> predicate, CallbackInfoReturnable<@Nullable EntityHitResult> info) {
-		EntityHitResult hitResult = method_37226(world, entity, vec3d, vec3d2, box, predicate, 0.6F);
+		if(CombatTweaks.getConfig().projectiles.checkWiderAreaForElytraUsers) {
+			EntityHitResult hitResult = method_37226(world, entity, vec3d, vec3d2, box, predicate, 0.6F);
 
-		if(hitResult != null && hitResult.getEntity() instanceof PlayerEntity player && player.isFallFlying())
-			info.setReturnValue(hitResult);
+			if(hitResult != null && hitResult.getEntity() instanceof PlayerEntity player && player.isFallFlying())
+				info.setReturnValue(hitResult);
+		}
 	}
 }

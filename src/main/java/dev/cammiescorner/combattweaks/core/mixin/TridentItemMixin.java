@@ -1,5 +1,7 @@
 package dev.cammiescorner.combattweaks.core.mixin;
 
+import dev.cammiescorner.combattweaks.CombatTweaks;
+import dev.cammiescorner.combattweaks.core.integration.CombatTweaksConfig;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -28,7 +30,7 @@ public class TridentItemMixin {
 			target = "Lnet/minecraft/entity/player/PlayerEntity;isTouchingWaterOrRain()Z"
 	))
 	public boolean activateRiptide(PlayerEntity playerEntity, ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
-		return true;
+		return CombatTweaks.getConfig().tridents.riptideWorksOutsideWater;
 	}
 
 	@Inject(method = "onStoppedUsing", at = @At(value = "INVOKE",
@@ -44,31 +46,27 @@ public class TridentItemMixin {
 			target = "Lnet/minecraft/entity/player/PlayerEntity;addVelocity(DDD)V"
 	))
 	public void modifyVelocity(Args args) {
+		CombatTweaksConfig.TridentTweaks tridents = CombatTweaks.getConfig().tridents;
 		Vec3d toAdd = new Vec3d(args.get(0), args.get(1), args.get(2));
 
 		if(!isRaining)
-			toAdd = toAdd.multiply(0.5D);
+			toAdd = toAdd.multiply(tridents.riptideEffectivenessOutsideWater);
 
 		Vec3d addedVelocity = velocity.add(toAdd);
 
-		if(addedVelocity.lengthSquared() > 6.25D)
+		if(tridents.capRiptideAndElytraSpeed && addedVelocity.lengthSquared() > 6.25D)
 			addedVelocity = addedVelocity.normalize().multiply(3).subtract(velocity);
 
 		args.setAll(addedVelocity.x, addedVelocity.y, addedVelocity.z);
-	}
-
-	@Inject(method = "onStoppedUsing", at = @At(value = "INVOKE", shift = At.Shift.AFTER,
-			target = "Lnet/minecraft/entity/player/PlayerEntity;addVelocity(DDD)V"
-	))
-	public void aaaaa(ItemStack stack, World world, LivingEntity user, int remainingUseTicks, CallbackInfo info) {
-		System.out.println(user.getVelocity().length());
 	}
 
 	@Inject(method = "use", at = @At(value = "RETURN",
 			ordinal = 1
 	), cancellable = true)
 	public void activateRiptide(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<TypedActionResult<ItemStack>> info) {
-		user.setCurrentHand(hand);
-		info.setReturnValue(TypedActionResult.consume(info.getReturnValue().getValue()));
+		if(CombatTweaks.getConfig().tridents.riptideWorksOutsideWater) {
+			user.setCurrentHand(hand);
+			info.setReturnValue(TypedActionResult.consume(info.getReturnValue().getValue()));
+		}
 	}
 }
