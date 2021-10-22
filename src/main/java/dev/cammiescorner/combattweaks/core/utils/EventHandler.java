@@ -25,6 +25,7 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LightningEntity;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootPool;
 import net.minecraft.nbt.NbtCompound;
@@ -70,13 +71,13 @@ public class EventHandler {
 		//-----Use Block Callback-----//
 		UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
 			BlockPos pos = hitResult.getBlockPos();
+			ItemStack stack = player.getStackInHand(hand);
 
-			if(enchantments.canMakeUnbreakableTools && player.isSneaking() && world.getBlockEntity(pos) instanceof BeaconBlockEntity beacon) {
+			if(enchantments.canMakeUnbreakableTools && player.isSneaking() && !(stack.getItem() instanceof BlockItem) && world.getBlockEntity(pos) instanceof BeaconBlockEntity beacon && beacon.level >= enchantments.unbreakableBeaconLevel) {
 				if(!world.isClient()) {
-					ItemStack stack = player.getStackInHand(hand);
 					NbtCompound tag = stack.getOrCreateNbt();
 
-					if(!tag.getBoolean("Unbreakable") && beacon.level >= enchantments.unbreakableBeaconLevel) {
+					if(!tag.getBoolean("Unbreakable")) {
 						boolean hasRequiredEnchants = enchantments.unbreakableRequiredEnchants.entrySet().stream().allMatch(entry -> {
 							Enchantment enchantment = Registry.ENCHANTMENT.get(entry.getKey());
 
@@ -105,11 +106,11 @@ public class EventHandler {
 
 							if(enchTag.isEmpty())
 								tag.remove("Enchantments");
+
+							world.playSound(null, pos, SoundEvents.ITEM_TRIDENT_THUNDER, SoundCategory.BLOCKS, 1F, 1F);
 						}
 					}
 				}
-
-				world.playSound(player, pos, SoundEvents.ITEM_TRIDENT_THUNDER, SoundCategory.BLOCKS, 1F, 1F);
 
 				return ActionResult.SUCCESS;
 			}
