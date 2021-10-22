@@ -1,0 +1,23 @@
+{
+	"feet": {
+		"removed": [
+			"845db27c-c624-495f-8c9f-6020a9a58b6b"
+		],
+		"modifiers": [
+			{
+				"attribute": "minecraft:generic.armor",
+				"uuid": "845db27c-c624-495f-8c9f-6020a9a58b6b",
+				"name": "Armor modifier",
+				"operation": "add",
+				"value": 3
+			},
+			{
+				"attribute": "minecraft:generic.knockback_resistance",
+				"uuid": "ffffffff-e66a-c31f-0000-000000000000",
+				"name": "Armor modifier",
+				"operation": "add",
+				"value": 0.15
+			}
+		]
+	}
+}
