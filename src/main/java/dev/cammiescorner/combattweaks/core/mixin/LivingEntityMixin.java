@@ -14,6 +14,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -33,6 +35,9 @@ public abstract class LivingEntityMixin extends Entity {
 	@Shadow public abstract @Nullable StatusEffectInstance getStatusEffect(StatusEffect effect);
 
 	@Shadow public float flyingSpeed;
+
+	@Shadow protected abstract void damageShield(float amount);
+
 	@Unique private float damageAmount;
 
 	public LivingEntityMixin(EntityType<?> entityType, World world) { super(entityType, world); }
@@ -53,7 +58,8 @@ public abstract class LivingEntityMixin extends Entity {
 			ordinal = 1
 	))
 	public double shieldArc(double shieldArc) {
-		return -((4D / 9D) * (100 / CombatTweaks.getConfig().shields.maxShieldArc));
+		System.out.println((CombatTweaks.getConfig().shields.maxShieldArc - 180D) / 180D);
+		return (CombatTweaks.getConfig().shields.maxShieldArc - 180D) / 180D;
 	}
 
 	@Inject(method = "isBlocking", at = @At(value = "RETURN",
@@ -80,7 +86,8 @@ public abstract class LivingEntityMixin extends Entity {
 			target = "Lnet/minecraft/entity/damage/DamageSource;isProjectile()Z"
 	), ordinal = 0)
 	public float modifyShieldDamageProtection(float amount, DamageSource source) {
-		return damageAmount - CombatTweaks.getConfig().shields.maxDamageBlocked;
+		damageShield(damageAmount);
+		return Math.max(0, damageAmount - CombatTweaks.getConfig().shields.maxDamageBlocked);
 	}
 
 	@SuppressWarnings("ConstantConditions")
@@ -94,14 +101,16 @@ public abstract class LivingEntityMixin extends Entity {
 		if(shields.canParry) {
 			Item item = activeItemStack.getItem();
 
-			if(item.getMaxUseTime(activeItemStack) - itemUseTimeLeft <= shields.parryWithinTicks) {
-				if((LivingEntity) (Object) this instanceof PlayerEntity player) {
-					player.getItemCooldownManager().set(item, shields.disableShieldOnParryTicks);
-					player.clearActiveItem();
-				}
+			if((LivingEntity) (Object) this instanceof PlayerEntity player && item.getMaxUseTime(activeItemStack) - itemUseTimeLeft <= shields.parryWithinTicks) {
+				player.getItemCooldownManager().set(item, shields.disableShieldOnParryTicks);
+				player.clearActiveItem();
 
 				if(source.getSource() instanceof PlayerEntity attacker)
 					attacker.getItemCooldownManager().set(attacker.getMainHandStack().getItem(), shields.disableWeaponOnParryTicks);
+				else if(source.getSource() instanceof LivingEntity attacker)
+					attacker.damage(DamageSource.player(player), damageAmount * 2);
+
+				world.playSound(null, getBlockPos(), SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1F, 1F);
 			}
 		}
 	}
