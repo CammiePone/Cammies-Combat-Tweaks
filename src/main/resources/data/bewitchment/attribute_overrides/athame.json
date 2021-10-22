@@ -1,0 +1,20 @@
+{
+	"mainhand": {
+		"modifiers": [
+			{
+				"attribute": "minecraft:generic.attack_speed",
+				"uuid": "fa233e1c-4180-4865-b01b-bcce9785aca3",
+				"name": "Weapon modifier",
+				"operation": "add",
+				"value": 1
+			},
+            {
+                "attribute": "reach-entity-attributes:attack_range",
+                "uuid": "1f362972-c5c5-4e9d-b69f-1fd13bd269e3",
+                "name": "Weapon modifier",
+				"operation": "add",
+				"value": -0.5
+            }
+		]
+	}
+}
