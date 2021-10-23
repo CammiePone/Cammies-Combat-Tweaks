@@ -45,10 +45,14 @@ public class SwordSweepPacket {
 			Vec3d pos = player.getPos().add(-MathHelper.sin(yaw) * 1.5D, player.getHeight() / 2D, MathHelper.cos(yaw) * 1.5D);
 			List<LivingEntity> targets = player.world.getNonSpectatingEntities(LivingEntity.class, Box.from(pos).offset(-0.5D, -0.5D, -0.5D).expand(1D, 0.25D, 1D));
 			ItemStack stack = player.getMainHandStack();
+			Entity crosshairTarget = player.world.getEntityById(entityId);
 
 			if(sweepingMultiplier > 0) {
+				if(crosshairTarget == null)
+					stack.damage(1, player, entity -> entity.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND));
+
 				targets.forEach(target -> {
-					if(target != player && target != player.world.getEntityById(entityId)) {
+					if(target != player && target != crosshairTarget) {
 						float damage = (float) (sweepingMultiplier * (player.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE) + EnchantmentHelper.getAttackDamage(player.getMainHandStack(), target.getGroup())));
 
 						target.takeKnockback(0.4D, MathHelper.sin(player.getYaw() * 0.0175F), -MathHelper.cos(player.getYaw() * 0.0175F));
@@ -58,7 +62,6 @@ public class SwordSweepPacket {
 
 				player.world.playSoundFromEntity(null, player, SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, player.getSoundCategory(), 1F, 1F);
 				player.spawnSweepAttackParticles();
-				stack.damage(1, player, entity -> entity.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND));
 			}
 		});
 	}
