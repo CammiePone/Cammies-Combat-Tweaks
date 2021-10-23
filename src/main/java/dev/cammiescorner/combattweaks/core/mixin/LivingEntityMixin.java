@@ -30,15 +30,11 @@ public abstract class LivingEntityMixin extends Entity {
 	@Shadow protected int itemUseTimeLeft;
 	@Shadow protected ItemStack activeItemStack;
 	@Shadow public float knockbackVelocity;
-	@Shadow protected abstract void initDataTracker();
-	@Shadow private @Nullable DamageSource lastDamageSource;
-	@Shadow public abstract @Nullable StatusEffectInstance getStatusEffect(StatusEffect effect);
-
 	@Shadow public float flyingSpeed;
-
-	@Shadow protected abstract void damageShield(float amount);
-
 	@Unique private float damageAmount;
+	@Shadow private @Nullable DamageSource lastDamageSource;
+	@Shadow protected abstract void initDataTracker();
+	@Shadow public abstract @Nullable StatusEffectInstance getStatusEffect(StatusEffect effect);
 
 	public LivingEntityMixin(EntityType<?> entityType, World world) { super(entityType, world); }
 
@@ -58,7 +54,6 @@ public abstract class LivingEntityMixin extends Entity {
 			ordinal = 1
 	))
 	public double shieldArc(double shieldArc) {
-		System.out.println((CombatTweaks.getConfig().shields.maxShieldArc - 180D) / 180D);
 		return (CombatTweaks.getConfig().shields.maxShieldArc - 180D) / 180D;
 	}
 
@@ -86,7 +81,6 @@ public abstract class LivingEntityMixin extends Entity {
 			target = "Lnet/minecraft/entity/damage/DamageSource;isProjectile()Z"
 	), ordinal = 0)
 	public float modifyShieldDamageProtection(float amount, DamageSource source) {
-		damageShield(damageAmount);
 		return Math.max(0, damageAmount - CombatTweaks.getConfig().shields.maxDamageBlocked);
 	}
 

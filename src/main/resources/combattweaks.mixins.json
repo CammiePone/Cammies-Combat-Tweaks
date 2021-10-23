@@ -6,10 +6,10 @@
 	"mixins": [
 		"BowItemMixin",
 		"CrossbowItemMixin",
+		"EnchantmentMixin",
 		"HungerManagerMixin",
 		"ItemStackMixin",
 		"LivingEntityMixin",
-		"MendingEnchantmentMixin",
 		"MultishotEnchantmentMixin",
 		"PiercingEnchantmentMixin",
 		"PlayerEntityMixin",
@@ -17,8 +17,7 @@
 		"ShieldItemMixin",
 		"SweepingEnchantmentMixin",
 		"ToolItemMixin",
-		"TridentItemMixin",
-		"UnbreakingEnchantmentMixin"
+		"TridentItemMixin"
 	],
 	"client": [
 		"client.MinecraftClientMixin"
