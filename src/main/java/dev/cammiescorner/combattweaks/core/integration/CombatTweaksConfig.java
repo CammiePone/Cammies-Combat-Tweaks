@@ -28,6 +28,7 @@ public class CombatTweaksConfig implements ConfigData {
 		public boolean itemCooldownAffectsLMB = true;
 		public boolean playersBypassInvulTicks = true;
 		public float minAttackCooldownForQueue = 0.66F;
+		public boolean playersCanCrouchJump = true;
 	}
 
 	public static class SwordTweaks {
