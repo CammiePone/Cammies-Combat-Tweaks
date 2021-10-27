@@ -23,8 +23,9 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 	public void tick(CallbackInfo info) {
 		if(!isOnGround() && CombatTweaks.getConfig().general.playersCanCrouchJump) {
 			if(isSneaking() && canCrouchJump) {
+				double scale = getHeight() / 1.8D;
 				canCrouchJump = false;
-				addVelocity(0, 0.125 * getJumpVelocityMultiplier(), 0);
+				addVelocity(0, 0.125 * scale, 0);
 			}
 		}
 		else
