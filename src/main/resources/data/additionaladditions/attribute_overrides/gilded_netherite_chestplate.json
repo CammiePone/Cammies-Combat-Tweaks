@@ -14,7 +14,7 @@
 			{
 				"attribute": "minecraft:generic.knockback_resistance",
 				"uuid": "9f3d476d-c118-4544-8365-64846904b48e",
-                "name": "Armor modifier",
+				"name": "Armor modifier",
 				"operation": "add",
 				"value": 0.1
 			}
