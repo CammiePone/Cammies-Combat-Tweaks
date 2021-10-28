@@ -3,10 +3,17 @@ package dev.cammiescorner.combattweaks.core.utils;
 import com.google.common.collect.Multimap;
 import com.mojang.datafixers.util.Pair;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.item.Item;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.RaycastContext;
 
 import java.util.Map;
 import java.util.Set;
@@ -26,5 +33,16 @@ public class CTHelper {
 			return Item.ATTACK_SPEED_MODIFIER_ID;
 
 		return uuid;
+	}
+
+	public static HitResult raycast(Entity origin, Entity target) {
+		Vec3d startPos = origin.getCameraPosVec(1F);
+		Vec3d endPos = target.getPos().add(0, Math.min(target.getHeight() / 2, origin.getEyeY()), 0);
+		HitResult hitResult = origin.world.raycast(new RaycastContext(startPos, endPos, RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, origin));
+
+		if(hitResult == null)
+			return BlockHitResult.createMissed(endPos, Direction.UP, new BlockPos(endPos));
+
+		return hitResult;
 	}
 }

@@ -1,6 +1,7 @@
 package dev.cammiescorner.combattweaks.common.packets.c2s;
 
 import dev.cammiescorner.combattweaks.CombatTweaks;
+import dev.cammiescorner.combattweaks.core.utils.CTHelper;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.impl.networking.ClientSidePacketRegistryImpl;
@@ -12,11 +13,13 @@ import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -43,12 +46,12 @@ public class SwordSweepPacket {
 			float yaw = player.getYaw() * 0.017453292F;
 			float sweepingMultiplier = EnchantmentHelper.getSweepingMultiplier(player);
 			Vec3d pos = player.getPos().add(-MathHelper.sin(yaw) * 1.5D, player.getHeight() / 2D, MathHelper.cos(yaw) * 1.5D);
-			List<LivingEntity> targets = player.world.getNonSpectatingEntities(LivingEntity.class, Box.from(pos).offset(-0.5D, -0.5D, -0.5D).expand(1D, 0.25D, 1D));
+			List<LivingEntity> targets = player.world.getEntitiesByClass(LivingEntity.class, Box.from(pos).offset(-0.5D, -0.5D, -0.5D).expand(1D, 0.25D, 1D), EntityPredicates.EXCEPT_SPECTATOR.and(livingEntity -> CTHelper.raycast(player, livingEntity).getType() == HitResult.Type.MISS));
 			ItemStack stack = player.getMainHandStack();
 			Entity crosshairTarget = player.world.getEntityById(entityId);
 
 			if(sweepingMultiplier > 0) {
-				if(crosshairTarget == null)
+				if(crosshairTarget == null && !targets.isEmpty())
 					stack.damage(1, player, entity -> entity.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND));
 
 				targets.forEach(target -> {
