@@ -1,8 +1,11 @@
 package dev.cammiescorner.combattweaks.core.mixin;
 
 import dev.cammiescorner.combattweaks.CombatTweaks;
+import dev.cammiescorner.combattweaks.core.integration.CombatTweaksConfig;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
@@ -21,6 +24,15 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
 	@Inject(method = "tick", at = @At("HEAD"))
 	public void tick(CallbackInfo info) {
+		CombatTweaksConfig.PotionTweaks potions = CombatTweaks.getConfig().potions;
+		StatusEffectInstance speed = getStatusEffect(StatusEffects.SPEED);
+		StatusEffectInstance slowness = getStatusEffect(StatusEffects.SLOWNESS);
+
+		if(speed != null && potions.speedIncreasesAirStrafingSpeed)
+			flyingSpeed *= (speed.getAmplifier() + 1) * 1.2;
+		if(slowness != null && potions.slownessDecreasesAirStrafingSpeed)
+			flyingSpeed *= Math.max(0, 1 - ((slowness.getAmplifier() + 1) * 0.15));
+
 		if(!isOnGround() && CombatTweaks.getConfig().general.playersCanCrouchJump) {
 			if(isSneaking() && canCrouchJump) {
 				double scale = getHeight() / 1.8D;
