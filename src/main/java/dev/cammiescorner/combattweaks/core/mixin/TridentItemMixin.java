@@ -30,7 +30,7 @@ public class TridentItemMixin {
 			target = "Lnet/minecraft/entity/player/PlayerEntity;isTouchingWaterOrRain()Z"
 	))
 	public boolean activateRiptide(PlayerEntity playerEntity, ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
-		return CombatTweaks.getConfig().tridents.riptideWorksOutsideWater;
+		return playerEntity.isTouchingWaterOrRain() || CombatTweaks.getConfig().tridents.riptideWorksOutsideWater;
 	}
 
 	@Inject(method = "onStoppedUsing", at = @At(value = "INVOKE",
