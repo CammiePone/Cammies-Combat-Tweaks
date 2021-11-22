@@ -11,7 +11,7 @@
 		"homepage": "https://www.curseforge.com/minecraft/mc-mods/cammies-combat-tweaks",
 		"sources": "https://github.com/CammiePone/Cammies-Combat-Tweaks"
 	},
-	"license": "MIT",
+	"license": "Custom License",
 	"icon": "assets/combattweaks/icon.png",
 	"environment": "*",
 	"entrypoints": {
