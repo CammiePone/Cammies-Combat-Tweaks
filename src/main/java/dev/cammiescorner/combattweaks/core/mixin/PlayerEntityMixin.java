@@ -29,9 +29,9 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 		StatusEffectInstance slowness = getStatusEffect(StatusEffects.SLOWNESS);
 
 		if(speed != null && potions.speedIncreasesAirStrafingSpeed)
-			flyingSpeed *= (speed.getAmplifier() + 1) * 1.2;
+			airStrafingSpeed *= (speed.getAmplifier() + 1) * 1.2;
 		if(slowness != null && potions.slownessDecreasesAirStrafingSpeed)
-			flyingSpeed *= Math.max(0, 1 - ((slowness.getAmplifier() + 1) * 0.15));
+			airStrafingSpeed *= Math.max(0, 1 - ((slowness.getAmplifier() + 1) * 0.15));
 
 		if(!isOnGround() && CombatTweaks.getConfig().general.playersCanCrouchJump) {
 			if(isSneaking() && canCrouchJump) {

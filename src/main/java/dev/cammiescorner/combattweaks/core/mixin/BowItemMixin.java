@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 @Mixin(BowItem.class)
 public class BowItemMixin {
 	@ModifyArg(method = "onStoppedUsing", at = @At(value = "INVOKE",
-			target = "Lnet/minecraft/entity/projectile/PersistentProjectileEntity;setProperties(Lnet/minecraft/entity/Entity;FFFFF)V"
+			target = "Lnet/minecraft/entity/projectile/PersistentProjectileEntity;setVelocity(Lnet/minecraft/entity/Entity;FFFFF)V"
 	), index = 5)
 	public float removeDeviation(float divergence) {
 		return CombatTweaks.getConfig().projectiles.randomDeviation;
