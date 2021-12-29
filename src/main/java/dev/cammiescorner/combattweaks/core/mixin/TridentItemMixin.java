@@ -15,7 +15,6 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArgs;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
@@ -26,12 +25,20 @@ public class TridentItemMixin {
 	@Unique public boolean isFallFlying = false;
 	@Unique public Vec3d velocity = Vec3d.ZERO;
 
-	@Redirect(method = "onStoppedUsing", at = @At(value = "INVOKE",
-			target = "Lnet/minecraft/entity/player/PlayerEntity;isTouchingWaterOrRain()Z"
+	@Inject(method = "onStoppedUsing", at = @At(value = "INVOKE",
+			target = "Lnet/minecraft/enchantment/EnchantmentHelper;getRiptide(Lnet/minecraft/item/ItemStack;)I"
 	))
-	public boolean activateRiptide(PlayerEntity playerEntity, ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
-		return playerEntity.isTouchingWaterOrRain() || CombatTweaks.getConfig().tridents.riptideWorksOutsideWater;
+	public void setRiptideValueJank(ItemStack stack, World world, LivingEntity user, int remainingUseTicks, CallbackInfo info) {
+		if(CombatTweaks.getConfig().tridents.riptideWorksOutsideWater)
+			CombatTweaks.jankyPieceOfShit = true;
 	}
+
+//	@Redirect(method = "onStoppedUsing", at = @At(value = "INVOKE",
+//			target = "Lnet/minecraft/entity/player/PlayerEntity;isTouchingWaterOrRain()Z"
+//	))
+//	public boolean activateRiptide(PlayerEntity playerEntity, ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
+//		return playerEntity.isTouchingWaterOrRain() || CombatTweaks.getConfig().tridents.riptideWorksOutsideWater;
+//	}
 
 	@Inject(method = "onStoppedUsing", at = @At(value = "INVOKE",
 			target = "Lnet/minecraft/entity/player/PlayerEntity;addVelocity(DDD)V"

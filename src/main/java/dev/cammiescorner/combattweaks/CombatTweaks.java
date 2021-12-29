@@ -16,6 +16,7 @@ import net.minecraft.util.Identifier;
 public class CombatTweaks implements ModInitializer {
 	public static final String MOD_ID = "combattweaks";
 	public static ConfigHolder<CombatTweaksConfig> configHolder;
+	public static boolean jankyPieceOfShit = false;
 
 	@Override
 	public void onInitialize() {
