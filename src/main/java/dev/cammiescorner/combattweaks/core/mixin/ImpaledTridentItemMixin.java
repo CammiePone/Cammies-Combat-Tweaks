@@ -2,12 +2,10 @@ package dev.cammiescorner.combattweaks.core.mixin;
 
 import dev.cammiescorner.combattweaks.CombatTweaks;
 import dev.cammiescorner.combattweaks.core.integration.CombatTweaksConfig;
+import ladysnake.impaled.common.item.ImpaledTridentItem;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.TridentItem;
-import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
@@ -19,18 +17,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
-@Mixin(TridentItem.class)
-public class TridentItemMixin {
+@Mixin(ImpaledTridentItem.class)
+public class ImpaledTridentItemMixin {
 	@Unique public boolean isRaining = false;
 	@Unique public boolean isFallFlying = false;
 	@Unique public Vec3d velocity = Vec3d.ZERO;
 
-	@Inject(method = "onStoppedUsing", at = @At(value = "INVOKE",
-			target = "Lnet/minecraft/enchantment/EnchantmentHelper;getRiptide(Lnet/minecraft/item/ItemStack;)I"
-	))
-	public void setRiptideValueJank(ItemStack stack, World world, LivingEntity user, int remainingUseTicks, CallbackInfo info) {
+	@Inject(method = "canRiptide", at = @At("RETURN"), cancellable = true)
+	public void cct$canRiptide(PlayerEntity playerEntity, CallbackInfoReturnable<Boolean> info) {
 		if(CombatTweaks.getConfig().tridents.riptideWorksOutsideWater)
-			CombatTweaks.jankyPieceOfShit = true;
+			info.setReturnValue(true);
 	}
 
 	@Inject(method = "onStoppedUsing", at = @At(value = "INVOKE",
@@ -58,15 +54,5 @@ public class TridentItemMixin {
 			addedVelocity = addedVelocity.normalize().multiply(3).subtract(velocity);
 
 		args.setAll(addedVelocity.x, addedVelocity.y, addedVelocity.z);
-	}
-
-	@Inject(method = "use", at = @At(value = "RETURN",
-			ordinal = 1
-	), cancellable = true)
-	public void activateRiptide(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<TypedActionResult<ItemStack>> info) {
-		if(CombatTweaks.getConfig().tridents.riptideWorksOutsideWater) {
-			user.setCurrentHand(hand);
-			info.setReturnValue(TypedActionResult.consume(info.getReturnValue().getValue()));
-		}
 	}
 }
