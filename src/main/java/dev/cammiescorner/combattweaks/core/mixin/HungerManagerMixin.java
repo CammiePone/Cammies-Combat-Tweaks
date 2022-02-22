@@ -13,36 +13,36 @@ public class HungerManagerMixin {
 	@ModifyConstant(method = "update", constant = @Constant(intValue = 18,
 			ordinal = 0
 	))
-	public int minHungerForRegen(int regenRate) {
+	public int combattweaks$minHungerForRegen(int regenRate) {
 		return CombatTweaks.getConfig().regen.minHungerForRegen;
 	}
 
 	@ModifyConstant(method = "update", constant = @Constant(intValue = 10,
 			ordinal = 0
 	))
-	public int regenRateSaturation(int regenRate) {
-		return 20;
+	public int combattweaks$regenRateSaturation(int regenRate) {
+		return CombatTweaks.getConfig().regen.saturationRegenTicks;
 	}
 
 	@ModifyConstant(method = "update", constant = @Constant(intValue = 80,
 			ordinal = 0
 	))
-	public int regenRateNoSaturation(int regenRate) {
-		return 20;
+	public int combattweaks$regenRateNoSaturation(int regenRate) {
+		return CombatTweaks.getConfig().regen.hungerRegenTicks;
 	}
 
 	@ModifyArg(method = "update", at = @At(value = "INVOKE",
 			target = "Lnet/minecraft/entity/player/PlayerEntity;heal(F)V",
 			ordinal = 0
 	))
-	public float heal(float value) {
+	public float combattweaks$heal(float value) {
 		return 1F;
 	}
 
 	@ModifyArg(method = "update", at = @At(value = "INVOKE",
 			target = "Lnet/minecraft/entity/player/HungerManager;addExhaustion(F)V"
 	))
-	public float exhaust(float value) {
+	public float combattweaks$exhaust(float value) {
 		return 4F;
 	}
 }

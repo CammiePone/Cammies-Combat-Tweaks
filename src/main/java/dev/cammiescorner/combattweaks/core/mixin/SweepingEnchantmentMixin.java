@@ -19,7 +19,7 @@ public abstract class SweepingEnchantmentMixin extends Enchantment {
 	protected SweepingEnchantmentMixin(Rarity rarity, EnchantmentTarget enchantmentTarget, EquipmentSlot[] equipmentSlots) { super(rarity, enchantmentTarget, equipmentSlots); }
 
 	@Inject(method = "getMultiplier", at = @At("HEAD"), cancellable = true)
-	private static void getMultiplier(int level, CallbackInfoReturnable<Float> info) {
+	private static void combattweaks$getMultiplier(int level, CallbackInfoReturnable<Float> info) {
 		info.setReturnValue(CombatTweaks.getConfig().enchantments.maxSweepingEdgeMult * (level / Enchantments.SWEEPING.getMaxLevel()));
 	}
 }

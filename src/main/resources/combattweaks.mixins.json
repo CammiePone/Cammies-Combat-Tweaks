@@ -19,6 +19,7 @@
 		"PlayerEntityMixin",
 		"ProjectileUtilMixin",
 		"ShieldItemMixin",
+		"StatusEffectMixin",
 		"SweepingEnchantmentMixin",
 		"ToolItemMixin",
 		"TridentItemMixin"

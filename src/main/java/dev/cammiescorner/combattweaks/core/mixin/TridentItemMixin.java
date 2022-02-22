@@ -28,7 +28,7 @@ public class TridentItemMixin {
 	@Inject(method = "onStoppedUsing", at = @At(value = "INVOKE",
 			target = "Lnet/minecraft/enchantment/EnchantmentHelper;getRiptide(Lnet/minecraft/item/ItemStack;)I"
 	))
-	public void setRiptideValueJank(ItemStack stack, World world, LivingEntity user, int remainingUseTicks, CallbackInfo info) {
+	public void combattweaks$setRiptideValueJank(ItemStack stack, World world, LivingEntity user, int remainingUseTicks, CallbackInfo info) {
 		if(CombatTweaks.getConfig().tridents.riptideWorksOutsideWater)
 			CombatTweaks.jankyPieceOfShit = true;
 	}
@@ -36,7 +36,7 @@ public class TridentItemMixin {
 	@Inject(method = "onStoppedUsing", at = @At(value = "INVOKE",
 			target = "Lnet/minecraft/entity/player/PlayerEntity;addVelocity(DDD)V"
 	))
-	public void setRaining(ItemStack stack, World world, LivingEntity user, int remainingUseTicks, CallbackInfo info) {
+	public void combattweaks$setRaining(ItemStack stack, World world, LivingEntity user, int remainingUseTicks, CallbackInfo info) {
 		isRaining = user.isTouchingWaterOrRain();
 		isFallFlying = user.isFallFlying();
 		velocity = user.getVelocity();
@@ -45,7 +45,7 @@ public class TridentItemMixin {
 	@ModifyArgs(method = "onStoppedUsing", at = @At(value = "INVOKE",
 			target = "Lnet/minecraft/entity/player/PlayerEntity;addVelocity(DDD)V"
 	))
-	public void modifyVelocity(Args args) {
+	public void combattweaks$modifyVelocity(Args args) {
 		CombatTweaksConfig.TridentTweaks tridents = CombatTweaks.getConfig().tridents;
 		Vec3d toAdd = new Vec3d(args.get(0), args.get(1), args.get(2));
 
@@ -63,7 +63,7 @@ public class TridentItemMixin {
 	@Inject(method = "use", at = @At(value = "RETURN",
 			ordinal = 1
 	), cancellable = true)
-	public void activateRiptide(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<TypedActionResult<ItemStack>> info) {
+	public void combattweaks$activateRiptide(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<TypedActionResult<ItemStack>> info) {
 		if(CombatTweaks.getConfig().tridents.riptideWorksOutsideWater) {
 			user.setCurrentHand(hand);
 			info.setReturnValue(TypedActionResult.consume(info.getReturnValue().getValue()));

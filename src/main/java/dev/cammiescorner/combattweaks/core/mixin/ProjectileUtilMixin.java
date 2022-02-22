@@ -21,7 +21,7 @@ import static net.minecraft.entity.projectile.ProjectileUtil.getEntityCollision;
 @Mixin(ProjectileUtil.class)
 public abstract class ProjectileUtilMixin {
 	@Inject(method = "getEntityCollision(Lnet/minecraft/world/World;Lnet/minecraft/entity/Entity;Lnet/minecraft/util/math/Vec3d;Lnet/minecraft/util/math/Vec3d;Lnet/minecraft/util/math/Box;Ljava/util/function/Predicate;)Lnet/minecraft/util/hit/EntityHitResult;", at = @At("HEAD"), cancellable = true)
-	private static void canHitFlyingEntity(World world, Entity entity, Vec3d vec3d, Vec3d vec3d2, Box box, Predicate<Entity> predicate, CallbackInfoReturnable<@Nullable EntityHitResult> info) {
+	private static void combattweaks$canHitFlyingEntity(World world, Entity entity, Vec3d vec3d, Vec3d vec3d2, Box box, Predicate<Entity> predicate, CallbackInfoReturnable<@Nullable EntityHitResult> info) {
 		if(CombatTweaks.getConfig().projectiles.checkWiderAreaForElytraUsers) {
 			EntityHitResult hitResult = getEntityCollision(world, entity, vec3d, vec3d2, box, predicate, 0.6F);
 

@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class EnchantmentMixin {
 	@SuppressWarnings("ConstantConditions")
 	@Inject(method = "isAcceptableItem", at = @At("TAIL"), cancellable = true)
-	public void isAcceptableItem(ItemStack stack, CallbackInfoReturnable<Boolean> info) {
+	public void combattweaks$isAcceptableItem(ItemStack stack, CallbackInfoReturnable<Boolean> info) {
 		Enchantment enchant = (Enchantment) (Object) this;
 		if(stack.hasNbt() && (enchant instanceof UnbreakingEnchantment || enchant instanceof MendingEnchantment))
 			info.setReturnValue(info.getReturnValueZ() && !stack.getNbt().getBoolean("Unbreakable"));

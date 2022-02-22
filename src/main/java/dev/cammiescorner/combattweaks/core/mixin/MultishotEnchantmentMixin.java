@@ -15,7 +15,7 @@ public abstract class MultishotEnchantmentMixin extends Enchantment {
 	protected MultishotEnchantmentMixin(Rarity rarity, EnchantmentTarget enchantmentTarget, EquipmentSlot[] equipmentSlots) { super(rarity, enchantmentTarget, equipmentSlots); }
 
 	@Inject(method = "canAccept", at = @At("HEAD"), cancellable = true)
-	public void canAccept(Enchantment other, CallbackInfoReturnable<Boolean> info) {
+	public void combattweaks$canAccept(Enchantment other, CallbackInfoReturnable<Boolean> info) {
 		if(CombatTweaks.getConfig().crossbows.multishotAndPiercingWorkTogether)
 			info.setReturnValue(super.canAccept(other));
 	}

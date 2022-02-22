@@ -24,7 +24,7 @@ public class ImpaledTridentItemMixin {
 	@Unique public Vec3d velocity = Vec3d.ZERO;
 
 	@Inject(method = "canRiptide", at = @At("RETURN"), cancellable = true)
-	public void cct$canRiptide(PlayerEntity playerEntity, CallbackInfoReturnable<Boolean> info) {
+	public void combattweaks$canRiptide(PlayerEntity playerEntity, CallbackInfoReturnable<Boolean> info) {
 		if(CombatTweaks.getConfig().tridents.riptideWorksOutsideWater)
 			info.setReturnValue(true);
 	}
@@ -32,7 +32,7 @@ public class ImpaledTridentItemMixin {
 	@Inject(method = "onStoppedUsing", at = @At(value = "INVOKE",
 			target = "Lnet/minecraft/entity/player/PlayerEntity;addVelocity(DDD)V"
 	))
-	public void setRaining(ItemStack stack, World world, LivingEntity user, int remainingUseTicks, CallbackInfo info) {
+	public void combattweaks$setRaining(ItemStack stack, World world, LivingEntity user, int remainingUseTicks, CallbackInfo info) {
 		isRaining = user.isTouchingWaterOrRain();
 		isFallFlying = user.isFallFlying();
 		velocity = user.getVelocity();
@@ -41,7 +41,7 @@ public class ImpaledTridentItemMixin {
 	@ModifyArgs(method = "onStoppedUsing", at = @At(value = "INVOKE",
 			target = "Lnet/minecraft/entity/player/PlayerEntity;addVelocity(DDD)V"
 	))
-	public void modifyVelocity(Args args) {
+	public void combattweaks$modifyVelocity(Args args) {
 		CombatTweaksConfig.TridentTweaks tridents = CombatTweaks.getConfig().tridents;
 		Vec3d toAdd = new Vec3d(args.get(0), args.get(1), args.get(2));
 

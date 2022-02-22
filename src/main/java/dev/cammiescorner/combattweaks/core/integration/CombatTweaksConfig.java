@@ -4,11 +4,6 @@ import dev.cammiescorner.combattweaks.CombatTweaks;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry.Gui.CollapsibleObject;
-import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
-import net.minecraft.util.Identifier;
-
-import java.util.List;
-import java.util.Map;
 
 @Config(name = CombatTweaks.MOD_ID)
 public class CombatTweaksConfig implements ConfigData {
@@ -64,19 +59,19 @@ public class CombatTweaksConfig implements ConfigData {
 	public static class PotionTweaks {
 		public boolean speedIncreasesAirStrafingSpeed = true;
 		public boolean slownessDecreasesAirStrafingSpeed = true;
+		public int regenBaseTimer = 50;
+		public int poisonBaseTimer = 25;
+		public int witherBaseTimer = 40;
 	}
 
 	public static class EnchantmentTweaks {
-		@Comment("Doesn't show up in ModMenu")
-		public Map<Identifier, Integer> unbreakableRequiredEnchants = Map.of(new Identifier("minecraft", "mending"), 1);
-		public List<String> unbreakableRemovesEnchants = List.of("minecraft:mending", "minecraft:unbreaking");
-		public int unbreakableBeaconLevel = 4;
-		public boolean canMakeUnbreakableTools = true;
 		public float maxSweepingEdgeMult = 1F;
 		public boolean thornsDealsNoKnockback = true;
 	}
 
 	public static class RegenerationTweaks {
-		public int minHungerForRegen = 11;
+		public int minHungerForRegen = 16;
+		public int saturationRegenTicks = 20;
+		public int hungerRegenTicks = 20;
 	}
 }

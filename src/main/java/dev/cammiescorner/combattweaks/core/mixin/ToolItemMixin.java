@@ -10,8 +10,8 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
 @Mixin(ToolItem.class)
 public class ToolItemMixin {
-	@ModifyVariable(method = "<init>", at = @At("HEAD"))
-	private static Item.Settings doubleGoldDurability(Item.Settings settings, ToolMaterial material) {
+	@ModifyVariable(method = "<init>", at = @At("HEAD"), argsOnly = true)
+	private static Item.Settings combattweaks$doubleGoldDurability(Item.Settings settings, ToolMaterial material) {
 		if(material == ToolMaterials.GOLD)
 			return settings.maxDamageIfAbsent(material.getDurability() * 2);
 

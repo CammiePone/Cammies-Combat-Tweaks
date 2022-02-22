@@ -11,7 +11,7 @@ public class CrossbowItemMixin {
 	@ModifyArg(method = "use", at = @At(value = "INVOKE",
 			target = "Lnet/minecraft/item/CrossbowItem;shootAll(Lnet/minecraft/world/World;Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/util/Hand;Lnet/minecraft/item/ItemStack;FF)V"
 	), index = 5)
-	public float removeDeviation(float divergence) {
+	public float combattweaks$removeDeviation(float divergence) {
 		return CombatTweaks.getConfig().projectiles.randomDeviation;
 	}
 }

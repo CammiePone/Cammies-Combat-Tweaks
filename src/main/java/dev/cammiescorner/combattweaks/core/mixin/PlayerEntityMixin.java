@@ -23,7 +23,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 	protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) { super(entityType, world); }
 
 	@Inject(method = "tick", at = @At("HEAD"))
-	public void tick(CallbackInfo info) {
+	public void combattweaks$tick(CallbackInfo info) {
 		CombatTweaksConfig.PotionTweaks potions = CombatTweaks.getConfig().potions;
 		StatusEffectInstance speed = getStatusEffect(StatusEffects.SPEED);
 		StatusEffectInstance slowness = getStatusEffect(StatusEffects.SLOWNESS);
@@ -45,7 +45,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 	}
 
 	@Inject(method = "jump", at = @At("HEAD"))
-	public void jump(CallbackInfo info) {
+	public void combattweaks$jump(CallbackInfo info) {
 		if(!isSneaking())
 			canCrouchJump = true;
 	}
@@ -54,7 +54,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 			target = "Lnet/minecraft/entity/player/PlayerEntity;onGround:Z",
 			ordinal = 1
 	))
-	public boolean preventSweepAttack(PlayerEntity player) {
+	public boolean combattweaks$preventSweepAttack(PlayerEntity player) {
 		return false;
 	}
 
@@ -62,7 +62,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 			target = "Lnet/minecraft/entity/player/PlayerEntity;world:Lnet/minecraft/world/World;",
 			ordinal = 1
 	), ordinal = 0)
-	public double spawnParticlesX(double value) {
+	public double combattweaks$spawnParticlesX(double value) {
 		return value * 1.5D;
 	}
 
@@ -70,7 +70,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 			target = "Lnet/minecraft/entity/player/PlayerEntity;world:Lnet/minecraft/world/World;",
 			ordinal = 1
 	), ordinal = 1)
-	public double spawnParticlesZ(double value) {
+	public double combattweaks$spawnParticlesZ(double value) {
 		return value * 1.5D;
 	}
 }

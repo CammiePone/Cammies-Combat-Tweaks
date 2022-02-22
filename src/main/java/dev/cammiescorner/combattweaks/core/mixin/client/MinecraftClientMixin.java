@@ -23,7 +23,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class MinecraftClientMixin {
 	@Shadow @Nullable public ClientPlayerEntity player;
 	@Shadow protected int attackCooldown;
-
 	@Shadow @Nullable public HitResult crosshairTarget;
 	@Unique private boolean attackQueued = false;
 
@@ -31,7 +30,7 @@ public abstract class MinecraftClientMixin {
 			target = "Lnet/minecraft/client/option/KeyBinding;wasPressed()Z",
 			ordinal = 13
 	))
-	public boolean queueAttack(KeyBinding instance) {
+	public boolean combattweaks$queueAttack(KeyBinding instance) {
 		return instance.wasPressed() || attackQueued;
 	}
 
@@ -39,7 +38,7 @@ public abstract class MinecraftClientMixin {
 			target = "Lnet/minecraft/client/MinecraftClient;doAttack()V",
 			ordinal = 0
 	), cancellable = true)
-	public void handleAttacking(CallbackInfo info) {
+	public void combattweaks$handleAttacking(CallbackInfo info) {
 		CombatTweaksConfig config = CombatTweaks.getConfig();
 		CombatTweaksConfig.GeneralTweaks general = config.general;
 		CombatTweaksConfig.SwordTweaks swords = config.swords;
@@ -68,7 +67,7 @@ public abstract class MinecraftClientMixin {
 	@Inject(method = "doAttack", at = @At(value = "INVOKE",
 			target = "Lnet/minecraft/client/network/ClientPlayerEntity;resetLastAttackedTicks()V"
 	))
-	public void removeAttackCooldown(CallbackInfo info) {
+	public void combattweaks$removeAttackCooldown(CallbackInfo info) {
 		CombatTweaksConfig config = CombatTweaks.getConfig();
 		CombatTweaksConfig.GeneralTweaks general = config.general;
 

@@ -2,6 +2,7 @@ package dev.cammiescorner.combattweaks.core.mixin;
 
 import dev.cammiescorner.combattweaks.CombatTweaks;
 import dev.cammiescorner.combattweaks.core.integration.CombatTweaksConfig;
+import dev.cammiescorner.combattweaks.core.utils.CTHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -36,34 +37,36 @@ public abstract class LivingEntityMixin extends Entity {
 	@ModifyConstant(method = "blockedByShield", constant = @Constant(doubleValue = 0.0D,
 			ordinal = 1
 	))
-	public double shieldArc(double shieldArc) {
+	public double combattweaks$shieldArc(double shieldArc) {
 		return (CombatTweaks.getConfig().shields.maxShieldArc - 180D) / 180D;
 	}
 
 	@Inject(method = "isBlocking", at = @At(value = "RETURN",
 			ordinal = 2
 	), cancellable = true)
-	public void isBlocking(CallbackInfoReturnable<Boolean> info) {
+	public void combattweaks$isBlocking(CallbackInfoReturnable<Boolean> info) {
 		info.setReturnValue(true);
 	}
 
 	@Inject(method = "damage", at = @At("HEAD"))
-	public void resetHurtTime(DamageSource source, float amount, CallbackInfoReturnable<Boolean> info) {
-		CombatTweaksConfig config = CombatTweaks.getConfig();
-		CombatTweaksConfig.GeneralTweaks general = config.general;
+	public void combattweaks$resetHurtTime(DamageSource source, float amount, CallbackInfoReturnable<Boolean> info) {
 		lastDamageSource = source;
 		damageAmount = amount;
 
-		if(general.playersBypassInvulTicks && (source.isProjectile() || source.isExplosive() || source.isFallingBlock() ||
-				source.getSource() instanceof ProjectileEntity || source.getAttacker() instanceof ProjectileEntity ||
-				source.getSource() instanceof PlayerEntity || source.getAttacker() instanceof PlayerEntity))
-			this.timeUntilRegen = 0;
+		if(!CTHelper.NO_IFRAME_BYPASS.contains(getType())) {
+			CombatTweaksConfig config = CombatTweaks.getConfig();
+			CombatTweaksConfig.GeneralTweaks general = config.general;
+
+			if(general.playersBypassInvulTicks && (source.isProjectile() || source.isExplosive() || source.isFallingBlock() ||
+					source.getSource() instanceof ProjectileEntity || source.getSource() instanceof PlayerEntity))
+				timeUntilRegen = 0;
+		}
 	}
 
 	@ModifyVariable(method = "damage", at = @At(value = "INVOKE",
 			target = "Lnet/minecraft/entity/damage/DamageSource;isProjectile()Z"
-	), ordinal = 0)
-	public float modifyShieldDamageProtection(float amount, DamageSource source) {
+	), ordinal = 0, argsOnly = true)
+	public float combattweaks$modifyShieldDamageProtection(float amount, DamageSource source) {
 		return Math.max(0, damageAmount - CombatTweaks.getConfig().shields.maxDamageBlocked);
 	}
 
@@ -71,7 +74,7 @@ public abstract class LivingEntityMixin extends Entity {
 	@Inject(method = "damage", at = @At(value = "INVOKE",
 			target = "Lnet/minecraft/entity/damage/DamageSource;getSource()Lnet/minecraft/entity/Entity;"
 	))
-	public void shieldParry(DamageSource source, float amount, CallbackInfoReturnable<Boolean> info) {
+	public void combattweaks$shieldParry(DamageSource source, float amount, CallbackInfoReturnable<Boolean> info) {
 		CombatTweaksConfig config = CombatTweaks.getConfig();
 		CombatTweaksConfig.ShieldTweaks shields = config.shields;
 
@@ -96,13 +99,13 @@ public abstract class LivingEntityMixin extends Entity {
 			shift = At.Shift.AFTER,
 			target = "Lnet/minecraft/entity/LivingEntity;knockbackVelocity:F"
 	))
-	public void noThornsKnockbackPart1(DamageSource source, float amount, CallbackInfoReturnable<Boolean> info) {
+	public void combattweaks$noThornsKnockbackPart1(DamageSource source, float amount, CallbackInfoReturnable<Boolean> info) {
 		if(CombatTweaks.getConfig().enchantments.thornsDealsNoKnockback && source instanceof EntityDamageSource source1 && source1.isThorns())
 			this.knockbackVelocity = 0F;
 	}
 
 	@Inject(method = "takeKnockback", at = @At("HEAD"), cancellable = true)
-	public void noThornsKnockbackPart2(double strength, double x, double z, CallbackInfo info) {
+	public void combattweaks$noThornsKnockbackPart2(double strength, double x, double z, CallbackInfo info) {
 		if(CombatTweaks.getConfig().enchantments.thornsDealsNoKnockback && lastDamageSource instanceof EntityDamageSource source && source.isThorns())
 			info.cancel();
 	}

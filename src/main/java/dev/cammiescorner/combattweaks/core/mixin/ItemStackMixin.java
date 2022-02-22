@@ -22,7 +22,7 @@ public abstract class ItemStackMixin {
 	@Shadow public abstract Item getItem();
 
 	@Redirect(method = "getAttributeModifiers", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/Item;getAttributeModifiers(Lnet/minecraft/entity/EquipmentSlot;)Lcom/google/common/collect/Multimap;"))
-	public Multimap<EntityAttribute, EntityAttributeModifier> getAttributeModifiers(Item item, EquipmentSlot slot) {
+	public Multimap<EntityAttribute, EntityAttributeModifier> combattweaks$getAttributeModifiers(Item item, EquipmentSlot slot) {
 		Multimap<EntityAttribute, EntityAttributeModifier> originalAttributes = getItem().getAttributeModifiers(slot);
 		Pair<Item, EquipmentSlot> itemSlotPair = new Pair<>(item, slot);
 		Multimap<EntityAttribute, EntityAttributeModifier> overrides = CTHelper.ATTRIBUTE_OVERRIDES.get(itemSlotPair);

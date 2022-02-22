@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(Entity.class)
 public class EntityMixin {
 	@Inject(method = "isTouchingWaterOrRain", at = @At("HEAD"), cancellable = true)
-	public void makeTridentWorkiePle(CallbackInfoReturnable<Boolean> info) {
+	public void combattweaks$makeTridentWorkiePle(CallbackInfoReturnable<Boolean> info) {
 		if(CombatTweaks.jankyPieceOfShit) {
 			info.setReturnValue(true);
 			CombatTweaks.jankyPieceOfShit = false;

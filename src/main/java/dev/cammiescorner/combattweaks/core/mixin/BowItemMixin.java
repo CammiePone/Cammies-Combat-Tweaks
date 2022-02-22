@@ -11,7 +11,7 @@ public class BowItemMixin {
 	@ModifyArg(method = "onStoppedUsing", at = @At(value = "INVOKE",
 			target = "Lnet/minecraft/entity/projectile/PersistentProjectileEntity;setVelocity(Lnet/minecraft/entity/Entity;FFFFF)V"
 	), index = 5)
-	public float removeDeviation(float divergence) {
+	public float combattweaks$removeDeviation(float divergence) {
 		return CombatTweaks.getConfig().projectiles.randomDeviation;
 	}
 }
