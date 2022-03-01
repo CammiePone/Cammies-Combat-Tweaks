@@ -4,19 +4,19 @@ import com.google.common.collect.Multimap;
 import com.mojang.datafixers.util.Pair;
 import dev.cammiescorner.combattweaks.CombatTweaks;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import net.fabricmc.fabric.api.tag.TagFactory;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.item.Item;
-import net.minecraft.tag.Tag;
+import net.minecraft.tag.TagKey;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.RaycastContext;
 
 import java.util.Map;
@@ -26,7 +26,7 @@ import java.util.UUID;
 public class CTHelper {
 	public static final Map<Pair<Item, EquipmentSlot>, Multimap<EntityAttribute, EntityAttributeModifier>> ATTRIBUTE_OVERRIDES = new Object2ObjectOpenHashMap<>();
 	public static final Map<Pair<Item, EquipmentSlot>, Set<UUID>> ATTRIBUTE_REMOVALS = new Object2ObjectOpenHashMap<>();
-	public static final Tag<EntityType<?>> NO_IFRAME_BYPASS = TagFactory.ENTITY_TYPE.create(CombatTweaks.id("no_iframe_bypass"));
+	public static final TagKey<EntityType<?>> NO_IFRAME_BYPASS = TagKey.of(Registry.ENTITY_TYPE_KEY, CombatTweaks.id("no_iframe_bypass"));
 
 	/**
 	 * Mojang hates modders :despair:

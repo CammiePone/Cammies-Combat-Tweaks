@@ -53,7 +53,7 @@ public abstract class LivingEntityMixin extends Entity {
 		lastDamageSource = source;
 		damageAmount = amount;
 
-		if(!CTHelper.NO_IFRAME_BYPASS.contains(getType())) {
+		if(!getType().isIn(CTHelper.NO_IFRAME_BYPASS)) {
 			CombatTweaksConfig config = CombatTweaks.getConfig();
 			CombatTweaksConfig.GeneralTweaks general = config.general;
 
