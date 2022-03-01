@@ -18,6 +18,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(MinecraftClient.class)
 public abstract class MinecraftClientMixin {
@@ -35,7 +36,7 @@ public abstract class MinecraftClientMixin {
 	}
 
 	@Inject(method = "handleInputEvents", at = @At(value = "INVOKE",
-			target = "Lnet/minecraft/client/MinecraftClient;doAttack()V",
+			target = "Lnet/minecraft/client/MinecraftClient;doAttack()Z",
 			ordinal = 0
 	), cancellable = true)
 	public void combattweaks$handleAttacking(CallbackInfo info) {
@@ -67,7 +68,7 @@ public abstract class MinecraftClientMixin {
 	@Inject(method = "doAttack", at = @At(value = "INVOKE",
 			target = "Lnet/minecraft/client/network/ClientPlayerEntity;resetLastAttackedTicks()V"
 	))
-	public void combattweaks$removeAttackCooldown(CallbackInfo info) {
+	public void combattweaks$removeAttackCooldown(CallbackInfoReturnable<Boolean> info) {
 		CombatTweaksConfig config = CombatTweaks.getConfig();
 		CombatTweaksConfig.GeneralTweaks general = config.general;
 
