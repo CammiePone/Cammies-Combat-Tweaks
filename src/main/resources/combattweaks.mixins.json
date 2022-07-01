@@ -12,7 +12,6 @@
 		"HellforkItemMixin",
 		"HungerManagerMixin",
 		"ImpaledTridentItemMixin",
-		"ItemStackMixin",
 		"LivingEntityMixin",
 		"MultishotEnchantmentMixin",
 		"PiercingEnchantmentMixin",
