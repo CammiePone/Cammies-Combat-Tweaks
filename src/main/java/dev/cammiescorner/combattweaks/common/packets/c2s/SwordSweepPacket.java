@@ -2,9 +2,9 @@ package dev.cammiescorner.combattweaks.common.packets.c2s;
 
 import dev.cammiescorner.combattweaks.CombatTweaks;
 import dev.cammiescorner.combattweaks.core.utils.CTHelper;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
-import net.fabricmc.fabric.impl.networking.ClientSidePacketRegistryImpl;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
@@ -36,7 +36,7 @@ public class SwordSweepPacket {
 		if(entity != null)
 			buf.writeInt(entity.getId());
 
-		ClientSidePacketRegistryImpl.INSTANCE.sendToServer(ID, buf);
+		ClientPlayNetworking.send(ID, buf);
 	}
 
 	public static void handle(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler network, PacketByteBuf buf, PacketSender sender) {
